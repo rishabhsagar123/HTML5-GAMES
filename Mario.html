@@ -1,0 +1,665 @@
+<html>
+<head>
+<title>Mario</title>
+</head>
+
+
+<body onkeydown="keyDown(event)" onkeyup="keyUp(event)">
+<canvas id="graphics" width=1000 height=600 style="position:absolute;top:0;left:0;background-image:url('raining.gif');"></canvas>
+<embed src="thunder3.mp3"/>
+<script>
+var kjump=new Audio("rain-07.mp3");
+var gameCanvas=document.getElementById('graphics');
+var grafx=gameCanvas.getContext('2d');
+var player=new Object("mario.png",300-16,100,32,44);
+var maxBlock=100;
+
+
+var block=new Array();
+
+
+for(var i=0;i<=4;i++){
+ block[i]=new Object("block.png",i*32+100,300,32,32);
+}
+block[5]=new Object("block.png",350,100,32,32);
+block[6]=new Object("block.png",382,350,32,32);
+block[7]=new Object("blocks.jpg",500,350,180,180);
+block[8]=new Object("blocks.jpg",816,370,180,180);
+block[9]=new Object("blocks1.jpg",1200,200,22,22);
+block[10]=new Object("dragon.gif",1300,180,32,32);
+block[11]=new Object("coin.png",1100,200,12,12);
+block[12]=new Object("blocks.jpg",1500,150,52,52);
+block[13]=new Object("blocks.jpg",1601,150,52,52);
+block[14]=new Object("blocks.jpg",1602,150,52,52);
+block[15]=new Object("pipe.jpg",1850,500,52,52);
+block[16]=new Object("pipe.jpg",2000,500,52,52);
+block[17]=new Object("pipe.jpg",2300,500,52,52);
+block[18]=new Object("pipe.jpg",2600,500,52,52);
+block[19]=new Object("pipe.jpg",3000,500,52,52);
+block[20]=new Object("pipe.jpg",3200,500,52,52);
+block[21]=new Object("pipe.jpg",3400,500,52,52);
+for(var i=21;i<=25;i++){
+  block[i]=new Object("block.png",3300,300,52,52);
+}
+block[26]=new Object("blocks.jpg",3500,500,62,62);
+block[27]=new Object("blocks.jpg",3600,500,62,62);
+block[28]=new Object("blocks.jpg",3700,400,62,62);
+block[29]=new Object("blocks.jpg",3900,200,62,62);
+block[30]=new Object("blocks.jpg",4000,100,32,32);
+block[31]=new Object("block.png",4000,500,32,32);
+block[32]=new Object("block.png",4050,500,32,32);
+block[33]=new Object("block.png",4100,500,32,32);
+block[34]=new Object("block.png",4150,500,32,32);
+block[35]=new Object("dragon.gif",4300,400,32,32);
+block[36]=new Object("blocks.jpg",4300,200,32,32);
+block[37]=new Object("blocks.jpg",4350,200,32,32);
+block[38]=new Object("blocks.jpg",4400,200,32,32);
+block[39]=new Object("blocks.jpg",4450,200,32,32);
+block[40]=new Object("blocks.jpg",4500,200,32,32);
+block[41]=new Object("blocks.jpg",4650,400,62,62);
+block[42]=new Object("block.png",4850,300,32,32);
+block[43]=new Object("block.png",4900,300,32,32);
+block[44]=new Object("block.png",4950,300,32,32);
+block[45]=new Object("block.png",5000,300,32,32);
+block[46]=new Object("file:///C:/Users/OM/Desktop/blocks1.jpg",5100,100,22,22);
+block[46]=new Object("blocks1.jpg",5100,100,32,32);
+block[47]=new Object("blocks1.jpg",5150,100,22,22);
+block[48]=new Object("blocks1.jpg",5200,100,22,22);
+block[49]=new Object("blocks1.jpg",5250,100,22,22);
+block[50]=new Object("blocks1.jpg",5300,100,32,12);
+block[51]=new Object("dragon.gif",5400,300,32,32);
+block[52]=new Object("blocks1.jpg",5550,300,32,12);
+block[53]=new Object("blocks1.jpg",5600,350,32,12);
+block[54]=new Object("blocks1.jpg",5650,400,32,12);
+block[55]=new Object("blocks1.jpg",5700,450,32,12);
+block[56]=new Object("blocks1.jpg",5750,500,32,12);
+block[57]=new Object("blocks1.jpg",5800,550,32,12);
+block[58]=new Object("pipe.jpg",6000,500,32,32);
+block[59]=new Object("pipe.jpg",6200,500,32,32);
+block[60]=new Object("pipe.jpg",6400,500,32,32);
+block[61]=new Object("blocks1.jpg",6550,500,32,12);
+block[62]=new Object("blocks1.jpg",6600,450,32,10);
+block[63]=new Object("blocks1.jpg",6650,400,32,10);
+block[64]=new Object("blocks1.jpg",6700,350,32,10);
+block[65]=new Object("blocks1.jpg",6750,300,32,10);
+block[66]=new Object("blocks1.jpg",6800,250,32,10);
+block[67]=new Object("blocks1.jpg",6850,200,32,10);
+block[68]=new Object("blocks1.jpg",6900,150,32,12);
+block[69]=new Object("blocks1.jpg",6950,100,32,10);
+block[70]=new Object("blocks1.jpg",7150,300,32,10);
+block[71]=new Object("mario%20block.png",7400,200,32,10);
+block[72]=new Object("mario%20block.png",7450,200,32,10);
+block[73]=new Object("mario%20block.png",7500,200,32,10);
+block[74]=new Object("mario%20block.png",7550,200,32,10);
+block[75]=new Object("mario%20block.png",7600,200,32,10);
+block[76]=new Object("mario%20block%201.png",7800,500,32,10);
+block[77]=new Object("mario%20block%201.png",8000,300,32,10);
+block[78]=new Object("mario%20block.png",8200,500,32,10);
+block[79]=new Object("mario%20block.png",8250,500,32,10);
+block[80]=new Object("mario%20block.png",8300,500,32,10);
+block[81]=new Object("mario%20block%201.png",8400,300,32,32);
+block[82]=new Object("block.png",8500,100,32,10);
+
+block[83]=new Object("block.png",8600,300,32,10);
+block[84]=new Object("mario%20block.png",8800,400,32,10);
+block[85]=new Object("mario%20block.png",8850,400,32,10);
+block[86]=new Object("mario%20block.png",8900,400,32,10);
+block[87]=new Object("mario%20block.png",8950,400,32,10);
+block[88]=new Object("mario%20block.png",9000,400,32,10);
+block[89]=new Object("mario%20block.png",9050,400,32,10);
+block[90]=new Object("mario%20block.png",9100,400,32,10);
+block[91]=new Object("mario%20block%201.png",9200,200,32,32);
+block[92]=new Object("mario%20block%201.png",9400,400,32,10);
+block[93]=new Object("mario%20block%201.png",9600,100,32,10);
+block[94]=new Object("mario%20block.png",9800,500,32,10);
+block[95]=new Object("mario%20block.png",9850,500,32,10);
+block[96]=new Object("mario%20block.png",9900,500,32,10);
+block[97]=new Object("mario%20block.png",9950,500,32,10);
+block[98]=new Object("mario%20block.png",10000,500,32,10);
+block[99]=new Object("mario%20block.png",10050,500,32,10);
+block[100]=new Object("coin.png",10100,450,32,10);
+
+var isLeft=false;
+var isRight=false;
+var isSpace=false;
+
+player.Gravity=20;
+player.Weight=0.1;
+function keyDown(e){
+  if(String.fromCharCode(e.keyCode)=="%"){
+    isLeft=true;
+  }
+    if(String.fromCharCode(e.keyCode)=="'"){
+    isRight=true;
+    
+  }
+  if(String.fromCharCode(e.keyCode)=="F"){
+    isSpace=true;
+    
+  }
+}
+function keyUp(e){
+  if(String.fromCharCode(e.keyCode)=="%"){
+    isLeft=false;
+  }
+    if(String.fromCharCode(e.keyCode)=="'"){
+    isRight=false;
+    }
+    if(String.fromCharCode(e.keyCode)=="F"){
+    isSpace=false;
+    }
+
+}
+
+Mainloop();
+function Mainloop(){
+
+  for(var i=0;i<=maxBlock;i++)
+  block[i].X+=-player.Velocity_X;
+   player.Y+=player.Velocity_Y;
+
+  
+  if(isLeft){
+    player.Velocity_X=-3;
+    if(player.isColliding(block[11])&& player.Y+player.height>block[11].Y-player.Velocity_Y){
+      alert("There are 5 levels hope you can complete it");
+    }
+      
+    }
+  if(isRight){
+    player.Velocity_X=3;
+    if(player.isColliding(block[11])&& player.Y+player.height>block[11].Y-player.Velocity_Y){
+      alert("There are 5 levels hope you can complete it");
+      
+  }
+}
+  if(!isLeft && !isRight && player.Velocity_Y==0){
+    player.Velocity_X=0;
+  }
+  if(player.Velocity_Y<player.Gravity){
+    player.Velocity_Y+=player.Weight;
+  }
+  for(var i=0;i<=14;i++){
+  if(player.isColliding(block[i]) && player.Y+player.height>block[i].Y-player.Velocity_Y){
+    player.Y=block[i].Y-player.height;
+    player.Velocity_Y=0;
+  }
+
+    if(player.isColliding(block[10]) && player.Y+player.height>block[10].Y-player.Velocity_Y){
+      alert("Game Over");
+    }
+    if(player.isColliding(block[35])&&player.Y+player.height>block[35].Y-player.height){
+        player.Y=block[35].Y-player.height;
+        player.Velocity_Y=0;
+        alert("Game over");
+      }
+  
+
+    if(player.isColliding(block[51])&&player.Y+player.height>block[51].Y-player.Velocity_Y){
+      
+        alert("Game over");
+      }
+    }
+  
+    
+  
+      
+        
+        if(player.isColliding(block[15])&&player.Y+player.height>block[15].Y-player.Velocity_Y){
+          player.Y=block[15].Y-player.height;
+          player.Velocity_Y=0;
+                   
+        }
+  
+           if(player.isColliding(block[16])&&player.Y+player.height>block[16].Y-player.Velocity_Y){
+            player.Y=block[16].Y-player.height;
+            player.Velocity_Y=0;
+           }
+    
+        if(player.isColliding(block[17])&&player.Y+player.height>block[17].Y-player.Velocity_Y){
+          player.Y=block[17].Y-player.height;
+          player.Velocity_Y=0;
+        }
+        if(player.isColliding(block[18])&&player.Y+player.height>block[18].Y-player.Velocity_Y){
+          player.Y=block[18].Y-player.height;
+          player.Velocity_Y=0;
+        }
+
+       if(player.isColliding(block[19])&&player.Y+player.height>block[19].Y-player.height){
+          player.Y=block[19].Y-player.height;
+          player.Velocity_Y=0;
+       }
+       if(player.isColliding(block[20])&&player.Y+player.height>block[20].Y-player.Velocity_Y){
+        player.Y=block[20].Y-player.height;
+        player.Velocity_Y=0;
+       }
+      
+        
+    if(player.isColliding(block[26])&&player.Y+player.height>block[26].Y-player.Velocity_Y){
+      player.Y=block[26].Y-player.height;
+      player.Velocity_Y=0;
+    }
+    if(player.isColliding(block[27])&&player.Y+player.height>block[27].Y-player.Velocity_Y){
+      player.Y=block[27].Y-player.height;
+      player.Velocity_Y=0;
+    }
+    if(player.isColliding(block[28])&&player.Y+player.height>block[28].Y-player.Velocity_Y){
+      player.Y=block[28].Y-player.height;
+      player.Velocity_Y=0;
+    }
+          if(player.isColliding(block[29])&&player.Y+player.height>block[29].Y-player.Velocity_Y){
+            player.Y=block[29].Y-player.height;
+            player.Velocity_Y=0;
+          }
+    if(player.isColliding(block[30])&&player.Y+player.height>block[30]-player.Velocity_Y){
+      player.Y=block[30].Y-player.height;
+      player.Velocity_Y=0;
+    }
+      
+      if(player.isColliding(block[31])&&player.Y+player.height>block[31].Y-player.Velocity_Y){
+        player.Y=block[31].Y-player.height;
+        player.Velocity_Y=0;
+      }
+    if(player.isColliding(block[32])&&player.Y+player.height>block[32].Y-player.Velocity_Y){
+        player.Y=block[32].Y-player.height;
+        player.Velocity_Y=0;
+      }
+      if(player.isColliding(block[32])&&player.Y+player.height>block[32].Y-player.Velocity_Y){
+        player.Y=block[32].Y-player.height;
+        player.Velocity_Y=0;
+      }
+    if(player.isColliding(block[33])&&player.Y+player.height>block[33].Y-player.Velocity_Y){
+        player.Y=block[33].Y-player.height;
+        player.Velocity_Y=0;
+      }
+      if(player.isColliding(block[34])&&player.Y+player.height>block[34].Y-player.Velocity_Y){
+        player.Y=block[34].Y-player.height;
+        player.Velocity_Y=0;
+      }
+      
+
+      if(player.isColliding(block[36])&&player.Y+player.height>block[36].Y-player.Velocity_Y){
+        player.Y=block[36].Y-player.height;
+        player.Velocity_Y=0;
+      }
+
+    if(player.isColliding(block[37])&&player.Y+player.height>block[37].Y-player.Velocity_Y){
+        player.Y=block[37].Y-player.height;
+        player.Velocity_Y=0;
+      }
+
+    if(player.isColliding(block[38])&&player.Y+player.height>block[38].Y-player.Velocity_Y){
+        player.Y=block[38].Y-player.height;
+        player.Velocity_Y=0;
+        alert("Level 3 Press space bar and arrow keys");
+      }
+
+    if(player.isColliding(block[39])&&player.Y+player.height>block[39].Y-player.Velocity_Y){
+        player.Y=block[39].Y-player.height;
+        player.Velocity_Y=0;
+      }
+         
+    if(player.isColliding(block[40])&&player.Y+player.height>block[40].Y-player.Velocity_Y){
+        player.Y=block[40].Y-player.height;
+        player.Velocity_Y=0;
+      }
+      
+    
+     if(player.isColliding(block[41])&&player.Y+player.height>block[41].Y-player.Velocity_Y){
+      player.Y=block[41].Y-player.height;
+      player.Velocity_Y=0;
+     }
+  
+  
+    if(player.isColliding(block[42])&&player.Y+player.height>block[42].Y-player.Velocity_Y){
+      player.Y=block[42].Y-player.height;
+      player.Velocity_Y=0;
+    }
+    if(player.isColliding(block[43])&&player.Y+player.height>block[43].Y-player.Velocity_Y){
+      player.Y=block[43].Y-player.height;
+      player.Velocity_Y=0;
+    }
+    if(player.isColliding(block[44])&&player.Y+player.height>block[44].Y-player.Velocity_Y){
+      player.Y=block[44].Y-player.height;
+      player.Velocity_Y=0;
+    }
+    if(player.isColliding(block[45])&&player.Y+player.height>block[45].Y-player.Velocity_Y){
+      player.Y=block[45].Y-player.height;
+      player.Velocity_Y=0;
+    }
+    
+    if(player.isColliding(block[46])&&player.Y+player.height>block[46].Y-player.Velocity_Y){
+      player.Y=block[46].Y-player.height;
+      player.Velocity_Y=0;
+    }
+    if(player.isColliding(block[47])&&player.Y+player.height>block[47].Y-player.Velocity_Y){
+      player.Y=block[47].Y-player.height;
+      player.Velocity_Y=0;
+    }
+    if(player.isColliding(block[48])&&player.Y+player.height>block[48].Y-player.Velocity_Y){
+      player.Y=block[48].Y-player.height;
+      player.Velocity_Y=0;
+    }
+    if(player.isColliding(block[49])&&player.Y+player.height>block[49].Y-player.Velocity_Y){
+      player.Y=block[49].Y-player.height;
+      player.Velocity_Y=0;
+    }
+    if(player.isColliding(block[50])&&player.Y+player.height>block[50].Y-player.Velocity_Y){
+      player.Y=block[50].Y-player.height;
+      player.Velocity_Y=0;
+    }
+    
+    
+    if(player.isColliding(block[52])&&player.Y+player.height>block[52].Y-player.Velocity_Y){
+      player.Y=block[52].Y-player.height;
+      player.Velocity_Y=0;
+    }
+    if(player.isColliding(block[53])&&player.Y+player.height>block[53].Y-player.Velocity_Y){
+      player.Y=block[53].Y-player.height;
+      player.Velocity_Y=0;
+    }
+    if(player.isColliding(block[54])&&player.Y+player.height>block[54].Y-player.Velocity_Y){
+      player.Y=block[54].Y-player.height;
+      player.Velocity_Y=0;
+    }
+    if(player.isColliding(block[55])&&player.Y+player.height>block[55].Y-player.Velocity_Y){
+      player.Y=block[55].Y-player.height;
+      player.Velocity_Y=0;
+    }
+    if(player.isColliding(block[56])&&player.Y+player.height>block[56].Y-player.Velocity_Y){
+      player.Y=block[56].Y-player.height;
+      player.Velocity_Y=0;
+    }
+    if(player.isColliding(block[57])&&player.Y+player.height>block[57].Y-player.Velocity_Y){
+      player.Y=block[57].Y-player.height;
+      player.Velocity_Y=0;
+    }
+    if(player.isColliding(block[58])&&player.Y+player.height>block[58].Y-player.Velocity_Y){
+      player.Y=block[58].Y-player.height;
+      player.Velocity_Y=0;
+    }
+    if(player.isColliding(block[59])&&player.Y+player.height>block[59].Y-player.Velocity_Y){
+      player.Y=block[59].Y-player.height;
+      player.Velocity_Y=0;
+    }
+    if(player.isColliding(block[60])&&player.Y+player.height>block[60].Y-player.Velocity_Y){
+      player.Y=block[60].Y-player.height;
+      player.Velocity_Y=0;
+    }
+    if(player.isColliding(block[61])&&player.Y+player.height>block[61].Y-player.Velocity_Y){
+      player.Y=block[61].Y-player.height;
+      player.Velocity_Y=0;
+    }
+    if(player.isColliding(block[62])&&player.Y+player.height>block[62].Y-player.Velocity_Y){
+      player.Y=block[62].Y-player.height;
+      player.Velocity_Y=0;
+    }
+    if(player.isColliding(block[63])&&player.Y+player.height>block[63].Y-player.Velocity_Y){
+      player.Y=block[63].Y-player.height;
+      player.Velocity_Y=0;
+    }
+    if(player.isColliding(block[64])&&player.Y+player.height>block[64].Y-player.Velocity_Y){
+      player.Y=block[64].Y-player.height;
+      player.Velocity_Y=0;
+    }
+    if(player.isColliding(block[65])&&player.Y+player.height>block[65].Y-player.Velocity_Y){
+      player.Y=block[65].Y-player.height;
+      player.Velocity_Y=0;
+    }
+    if(player.isColliding(block[66])&&player.Y+player.height>block[66].Y-player.Velocity_Y){
+      player.Y=block[66].Y-player.height;
+      player.Velocity_Y=0;
+    }
+    if(player.isColliding(block[67])&&player.Y+player.height>block[67].Y-player.Velocity_Y){
+      player.Y=block[67].Y-player.height;
+      player.Velocity_Y=0;
+    }
+    if(player.isColliding(block[68])&&player.Y+player.height>block[68].Y-player.Velocity_Y){
+      player.Y=block[68].Y-player.height;
+      player.Velocity_Y=0;
+      }
+      if(player.isColliding(block[69])&&player.Y+player.height>block[69].Y-player.Velocity_Y){
+        player.Y=block[69].Y-player.height;
+        player.Velocity_Y=0;
+      }
+      if(player.isColliding(block[70])&&player.Y+player.height>block[70].Y-player.Velocity_Y){
+        player.Y=block[70].Y-player.height;
+        player.Velocity_Y=0;
+        alert("Welcome to level 4 press space bar to jump");
+      }
+    
+      if(player.isColliding(block[71])&&player.Y+player.height>block[71].Y-player.Velocity_Y){
+        player.Y=block[71].Y-player.height;
+        player.Velocity_Y=0;
+      }
+      if(player.isColliding(block[72])&&player.Y+player.height>block[72].Y-player.Velocity_Y){
+        player.Y=block[72].Y-player.height;
+        player.Velocity_Y=0;
+      }
+      if(player.isColliding(block[73])&&player.Y+player.height>block[73].Y-player.Velocity_Y){
+        player.Y=block[73].Y-player.height;
+        player.Velocity_Y=0;
+      }
+      if(player.isColliding(block[74])&&player.Y+player.height>block[74].Y-player.Velocity_Y){
+        player.Y=block[74].Y-player.height;
+        player.Velocity_Y=0;
+      }
+    if(player.isColliding(block[75])&&player.Y+player.height>block[75].Y-player.Velocity_Y){
+      player.Y=block[75].Y-player.height;
+      player.Velocity_Y=0;
+    }
+    if(player.isColliding(block[76])&&player.Y+player.height>block[76].Y-player.Velocity_Y){
+      player.Y=block[76].Y-player.height;
+      player.Velocity_Y=0;
+    }
+
+    if(player.isColliding(block[77])&&player.Y+player.height>block[77].Y-player.Velocity_Y){
+      player.Y=block[77].Y-player.height;
+      player.Velocity_Y=0;
+    }
+    if(player.isColliding(block[78])&&player.Y+player.height>block[78].Y-player.Velocity_Y){
+      player.Y=block[78].Y-player.height;
+      player.Velocity_Y=0;
+    }
+    if(player.isColliding(block[79])&&player.Y+player.height>block[79].Y-player.Velocity_Y){
+      player.Y=block[79].Y-player.height;
+      player.Velocity_Y=0;
+    }
+    if(player.isColliding(block[80])&&player.Y+player.height>block[80].Y-player.Velocity_Y){
+      player.Y=block[80].Y-player.height;
+      player.Velocity_Y=0;
+
+    }
+    
+       if(player.isColliding(block[81])&&player.Y+player.height>block[81].Y-player.Velocity_Y){
+      player.Y=block[81].Y-player.height;
+      player.Velocity_Y=0;
+      alert("Welcome to the last level");
+
+    }
+    
+
+    if(player.isColliding(block[83])&&player.Y+player.height>block[83].Y-player.Velocity_Y){
+      player.Y=block[83].Y-player.height;
+      player.Velocity_Y=0;
+      
+
+    }
+       if(player.isColliding(block[84])&&player.Y+player.height>block[84].Y-player.Velocity_Y){
+      player.Y=block[84].Y-player.height;
+      player.Velocity_Y=0;
+      
+
+    }
+    if(player.isColliding(block[85])&&player.Y+player.height>block[85].Y-player.Velocity_Y){
+      player.Y=block[85].Y-player.height;
+      player.Velocity_Y=0;
+      
+
+    }
+    if(player.isColliding(block[86])&&player.Y+player.height>block[86].Y-player.Velocity_Y){
+      player.Y=block[86].Y-player.height;
+      player.Velocity_Y=0;
+      
+
+    }
+    if(player.isColliding(block[87])&&player.Y+player.height>block[87].Y-player.Velocity_Y){
+      player.Y=block[87].Y-player.height;
+      player.Velocity_Y=0;
+      
+
+    }
+    if(player.isColliding(block[88])&&player.Y+player.height>block[88].Y-player.Velocity_Y){
+      player.Y=block[88].Y-player.height;
+      player.Velocity_Y=0;
+      
+
+    }
+    if(player.isColliding(block[89])&&player.Y+player.height>block[89].Y-player.Velocity_Y){
+      player.Y=block[89].Y-player.height;
+      player.Velocity_Y=0;
+      
+
+    }
+    if(player.isColliding(block[90])&&player.Y+player.height>block[90].Y-player.Velocity_Y){
+      player.Y=block[90].Y-player.height;
+      player.Velocity_Y=0;
+      
+
+    }
+    if(player.isColliding(block[91])&&player.Y+player.height>block[91].Y-player.Velocity_Y){
+      player.Y=block[91].Y-player.height;
+      player.Velocity_Y=0;
+      
+
+    }
+    if(player.isColliding(block[92])&&player.Y+player.height>block[92].Y-player.Velocity_Y){
+      player.Y=block[92].Y-player.height;
+      player.Velocity_Y=0;
+      
+
+    }
+    if(player.isColliding(block[93])&&player.Y+player.height>block[93].Y-player.Velocity_Y){
+      player.Y=block[93].Y-player.height;
+      player.Velocity_Y=0;
+      
+
+    }
+    if(player.isColliding(block[94])&&player.Y+player.height>block[94].Y-player.Velocity_Y){
+      player.Y=block[94].Y-player.height;
+      player.Velocity_Y=0;
+      
+
+    }
+    if(player.isColliding(block[95])&&player.Y+player.height>block[95].Y-player.Velocity_Y){
+      player.Y=block[95].Y-player.height;
+      player.Velocity_Y=0;
+      
+
+    }
+    if(player.isColliding(block[96])&&player.Y+player.height>block[96].Y-player.Velocity_Y){
+      player.Y=block[96].Y-player.height;
+      player.Velocity_Y=0;
+      
+
+    }
+    if(player.isColliding(block[97])&&player.Y+player.height>block[97].Y-player.Velocity_Y){
+      player.Y=block[97].Y-player.height;
+      player.Velocity_Y=0;
+      
+
+    }
+    if(player.isColliding(block[98])&&player.Y+player.height>block[98].Y-player.Velocity_Y){
+      player.Y=block[98].Y-player.height;
+      player.Velocity_Y=0;
+      
+
+    }
+    if(player.isColliding(block[99])&&player.Y+player.height>block[99].Y-player.Velocity_Y){
+      player.Y=block[99].Y-player.height;
+      player.Velocity_Y=0;
+      
+
+    }
+    if(player.isColliding(block[100])&&player.Y+player.height>block[100].Y-player.Velocity_Y){
+      player.Y=block[100].Y-player.height;
+      player.Velocity_Y=0;
+      alert("Thankyou for Playing");
+      
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+  if(isSpace && player.Velocity_Y==0){
+    player.Velocity_Y=-5;
+    
+    kjump.play();
+  }
+  grafx.clearRect(0,0,gameCanvas.width,gameCanvas.height);
+  grafx.drawImage(player.sprite,player.X,player.Y);
+  for(var i=0;i<=maxBlock;i++){
+  grafx.drawImage(block[i].sprite,block[i].X,block[i].Y);
+    }
+
+setTimeout(Mainloop,1000/40); 
+
+}
+function Object(img,x,y,width,height){
+  this.sprite=new Image();
+  this.sprite.src=img;
+  this.X=x;
+  this.Y=y;
+  this.width=width;
+  this.height=height;
+  this.Previous_X;
+  this.Previous_Y;
+  this.Velocity_X=0;
+  this.Velocity_Y=0;
+  this.Gravity=0;
+  this.Weight=0;
+  this.isColliding=function(obj){
+    if(this.X>obj.X+obj.width){
+      return false;
+    }
+    if(this.X+this.width<obj.X){
+      return false;
+    }
+    if(this.Y>obj.Y+obj.height){
+      return false;
+    }
+    if(this.Y+obj.height<obj.Y){
+      return false;
+    }
+    return true;
+  }
+  
+}
+
+</script>
+</body>
+</html>
