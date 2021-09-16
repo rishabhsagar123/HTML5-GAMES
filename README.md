@@ -1,4 +1,3 @@
 # Rishabh
 Developer and Founder of the GamEvolution
-This is the source code of games,websites and other stuff providing free here.
-All the games in html5 and javascript 
+Here You Get the Source Code Of Various Games Made in HTML5 and Javascript.
