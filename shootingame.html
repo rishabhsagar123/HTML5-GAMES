@@ -90,7 +90,7 @@ imageObj.src="";
 var UP_KEY=38;
 var RIGHT_KEY=39;
 var DOWN_KEY=40;
-var SPACE_KEY=70;
+var F_KEY=70;
 var HERO_MOVEMENT=10;
 
 var lastLoopRun=0;
@@ -131,8 +131,8 @@ controller.up=isPressed;
 if(keyCode==DOWN_KEY){
 controller.down=isPressed;
 }
-if(keyCode==SPACE_KEY){
-controller.space=isPressed;
+if(keyCode==F_KEY){
+controller.f=isPressed;
 }
 
 
@@ -175,7 +175,7 @@ hero.x-=HERO_MOVEMENT;
 if(controller.right){
 hero.x+=HERO_MOVEMENT;
 }
-if(controller.space && laser.y<=-120){
+if(controller.f && laser.y<=-120){
 laser.x=hero.x+9;
 laser.y=hero.y-laser.h;
 }
