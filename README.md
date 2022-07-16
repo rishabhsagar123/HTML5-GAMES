@@ -4,5 +4,6 @@ Here You Get the Source Code Of Various Games Made in HTML5 and Javascript.Some 
 -Snake Game(Snake.html):- You Not Need Anything Just Download/ Copy the Source Code and Save it and Run!!<br/>
 -Shooting Game(shootinggame.html):- Same You Not Need Anything Just Copy the Code or Download the File and Run!!<br/>
 -Shooting Game Advance(shootinggame2.html):-Same You Not Need Anything Just Copy the Code or Download the File and Run!!<br/>
+-TETRIS Game(TETRIS.html):-Tetris Game Made In HTML,CSS And Javascript For Controls Use:- Q,W Key To Change The Positions And Arrow Keys To Move It.<br/>
 
 You Can Edit the Games as per Your Choice Like Adding Images and All..
