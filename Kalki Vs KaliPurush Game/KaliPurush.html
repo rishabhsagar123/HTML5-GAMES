@@ -1,0 +1,70 @@
+<html>
+<head>
+<title>Kalipurush Vs Kalki Game</title>
+</head>
+<body>
+<center><h1 style="font-size:100px;">Kalipurush Vs Kalki Game</h1></center>
+<p id="score" style="font-size:50px;color:red">Score:</p>
+<p id="status" style="font-size:50px;color:red">Your Status:-</p>
+<p id="name" style="font-size:50px;color:blue">Name:</p>
+<center>
+<h1 style="float:left;width:100px;height:100px;">Kalipurush</h1>
+<img src="C:\Users\\hp\OneDrive\Desktop\kalipurush.jpg" onclick="myfunction()"/>
+<h1 style="float:left;width:100px;height:100px;">Kalki</h1>
+<img src="C:\Users\hp\OneDrive\Desktop\kalki.jpg" onclick="myfunction()"/>
+</center>
+<script>
+var score=0;
+var i;
+function myfunction(){
+var r=prompt("Enter Yug You Want To Enter:-type(satyug),type(dwaparyug),type(tretayug),type(kalyug)");
+switch(r){
+case "satyug":
+document.bgColor="red";
+fight();
+break;
+case "dwaparyug":
+document.bgColor="green";
+fight();
+break;
+case "tretayug":
+document.bgColor="blue";
+fight();
+break;
+default:
+document.bgColor="black";
+fight();
+}
+}
+function fight(){
+alert("Want To Fight With Kalipurush Defeat Kali And Be Kalki");
+var k=prompt("Enter Your Name");
+var t=prompt("Enter Rounds:");
+var y=0;
+for(i=0;i<=t;i++){
+var x=Math.floor((Math.random()*4) + 1);
+var g=prompt("Enter Attack as for Sword(type=0),Sudarshan Chakra(type=1),Brahmastra(type=2),Devastra(type=3)");
+if(g==x){
+score+=1;
+alert("Kalki Win");
+}else{
+y+=1;
+score-=1;
+alert("Kalki Lose");
+}
+}
+if(score>y){
+document.getElementById("name").innerHTML="Kalki is" + k;
+document.bgColor="yellow";
+}else{
+alert("AAAATU SALE");
+document.getElementById("score").innerHTML="Score:" + score;
+document.getElementById("status").innerHTML="Kalipurush";
+document.getElementById("name").innerHTML=k;
+}
+}
+</script>
+</body>
+</html>
+
+
