@@ -1,0 +1,203 @@
+<html>
+<head>
+<title>Alien Shooter Game</title>
+<style type="text/css">
+#stage{
+	position:relative;
+	width:800px;
+	height:800px;
+
+}
+#background{
+	width:800px;
+	height:800px;
+    position:absolute;
+    top:0px;
+    left:0px;
+    background-image: url('C:\\Users\\sanchalak\\Desktop\\Alien Shooter Game\\background.jpg');
+}
+#cannon{
+	width:60px;
+	height:60px;
+	position: absolute;
+	top:740px;
+	left:390px;
+	background-image:url('C:\\Users\\sanchalak\\Desktop\\Alien Shooter Game\\canon.png');
+
+}
+#alien{
+	width:60px;
+	height:60px;
+	position:absolute;
+	top:20px;
+	left:320px;
+	background-image:url('C:\\Users\\sanchalak\\Desktop\\Alien Shooter Game\\alien.png');
+}
+#alien2{
+   width:60px;
+	height:60px;
+	position:absolute;
+	top:20px;
+	left:260px;
+	background-image:url('C:\\Users\\sanchalak\\Desktop\\Alien Shooter Game\\alien2.png');
+}
+#missile{
+	width:50px;
+	height:50px;
+	position:absolute;
+	top:710px;
+	left:395px;
+	background-image: url('C:\\Users\\sanchalak\\Desktop\\Alien Shooter Game\\fire.png');
+	-webkit-transition: left 0.5s ease-out 0s;
+-moz-transition: left 0.5s ease-out 0s;
+transition: left 0.5s ease-out 0s;
+}
+#game
+{
+margin: 0px auto;
+width: 830px;
+height: auto;
+padding: 15px;
+border: black;
+background: linear-gradient(top, #588063, #000);
+box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+border-radius: 10px;
+-webkit-text-stroke: 1px #000;
+-moz-text-stroke: 1px #000;
+text-stroke: 1px #000;
+text-shadow: 5px 5px 3px rgba(0, 0, 0, 0.5);
+text-shadow: 3px 3px lime;
+}
+
+	</style>
+</head>
+<body>
+
+	<center>
+		<section id="game">
+		<h1>Alein Attack</h1>
+<div id="stage">
+	<div id="background"></div>
+	<div id="cannon"></div>
+	<div id="missile"></div>
+	<div id="alien"></div>
+	<div id="alien2"></div>
+</div>
+<p id="output">Enter the value of X Position between 0-800 and Y Position between 0-150 then Fire.</p>
+<input id="inputX" placeholder="X...."/>
+<input id="inputY" placeholder="Y..."/>
+<button id="fire">Fire!!!</button>
+</section>
+</center>
+
+
+<script>
+
+	var alienX=320;
+	var alienY=20;
+	var alieniX=260;
+	var alieniY=20;
+	var guessX = 0;
+    var guessY = 0;
+   var shotsRemaining = 8;
+   var shotsMade = 0;
+   var gameState = "";
+   var gameWon = false;
+
+
+var cannon = document.querySelector("#cannon");
+var alien = document.querySelector("#alien");
+var alieni = document.querySelector("#alien2");
+var missile = document.querySelector("#missile");
+var inputX = document.querySelector("#inputX");
+var inputY = document.querySelector("#inputY");
+var output = document.querySelector("#output");
+
+var button=document.querySelector("#fire");
+button.style.cursor="pointer";
+button.addEventListener("click", clickHandler, false);
+function clickHandler()
+{
+playGame();
+}
+
+function playGame(){
+	shotsRemaining=shotsRemaining-1;
+	shotsMade=shotsMade+1;
+	gameState="Shots:"+ shotsMade + "Shots Remaining:"+shotsRemaining;
+	guessX=parseInt(inputX.value);
+	guessY=parseInt(inputY.value);
+	
+	
+if((guessX >= alienX && guessX <= alienX + 100)||(guessX >= alieniX && guessX <= alieniX + 100) ){
+		if((guessY >= alienY && guessY <= alienY + 100) || (guessY >= alieniY && guessY <= alieniY + 100) ){
+
+	
+			gameWon=true;
+			endGame();
+			alert("You Win!!");
+
+		}
+	}else{
+			output.innerHTML="Missed!!" + gameState;
+			if(shotsRemaining<1){
+				endGame();
+			}
+		}
+		if(!gameWon){
+			alienX=Math.floor(Math.random() * 780);
+			console.log("Alien1:" + alienX);
+			alienY+=Math.floor(Math.random()* 30);
+			alieniX=Math.floor(Math.random() * 780);
+			console.log("Alien2:" + alieniX);
+			alieniY+=Math.floor(Math.random()* 30);
+			
+		render();
+
+	}
+	function render()
+	{
+       alien.style.left = alienX + "px";
+       alien.style.top = alienY + "px";
+
+       alieni.style.left = alieniX + "px";
+       alieni.style.top = alieniY + "px";
+
+       cannon.style.left= guessX + "px";
+   
+       missile.style.left = guessX + "px";
+     
+    
+      var guessY =parseInt(inputY.value) ;
+        const animationInterval = setInterval(function () {
+            if (guessY <= 0) {
+                clearInterval(animationInterval); // Stop the animation when the sprite reaches the top.
+            } else {
+                guessY -= 20;
+                missile.style.top = guessY + "px";
+                /*
+                  // Need to add invisibility of missile after cross the stage.
+                */
+            }
+        }, 1000);
+        
+
+}
+}
+
+
+function endGame()
+{ 
+	if(gameWon){
+		output.innerHTML="You save the Planet!!" + "<br>"
+		+ "It only took You: " + shotsMade + "shots";
+	}else{
+		output.innerHTML="You Lost!!" + "<br>"
+		+ "Earth has been invaded";
+	}
+
+}
+
+</script>
+</body>
+</html>
