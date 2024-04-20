@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Angry Birds</title>
+     <script src="Box2dWeb-2.1.a.3.min.js"></script>
+    <script src="boxbox.min.js"></script>
+   <style type="text/css">
+    #game{
+    	background-image: url('backimg.jpg');
+    	width: 2000;
+    	height: 2000;
+    }
+
+   </style>
+</head>
+<body>
+	<p id="gameover" style="width:500;height:500;display:none;text-align:center;color:red;font-size:200px;">Game Over!!</p>
+	<p id="screen"></p>
+	<audio id="myAudio">
+  <source src="angryi.mp3" type="audio/mp3">
+</audio>
+<audio id="playact">
+		<source src="angryij.mp3" type="audio/mp3">
+		</audio>
+
+		<audio id="collides">
+			<source src="angryio.mp3" type="audio/mp3">
+		</audio>
+
+	<canvas id="game" width=2000 height=2000>
+	</canvas>
+	<script>
+		var canvasElem=document.getElementById("game");
+		var world=boxbox.createWorld(canvasElem);
+		var i=0;
+		var j=0;
+    var introplay=document.getElementById("myAudio");
+    var playaction=document.getElementById("playact");
+    var collions=document.getElementById("collides");
+		var a=document.getElementById("gameover");
+
+		
+
+		introplay.play();
+
+		var player={
+			name: "player",
+			shape: "circle",
+			radius:1,
+			image:"angry.png",
+			imageStretchToFit:true,
+			x:4,
+		  
+      key:"Enter",
+			density:2,
+			onKeyDown:function(e){
+                    
+		        if(e.key == "Enter"){	
+		        	console.log(1);
+                     if(i == 1){
+                 	this.applyImpulse(150,60);
+                 	playaction.play();
+         }
+				areal();
+			}
+
+
+		
+
+           
+		}
+	}
+		
+
+	
+		function areal()
+		{
+         i+=1;
+         
+     }
+   function gameover()
+   {
+	if(j>100){
+		a.style.display='block';
+	}
+   }
+
+		/*function handleKeyPress(event) {
+  if (event.key === "Enter") {
+    // Your action to perform when Enter is pressed
+    console.log("Enter pressed!");
+    
+    // Remove the event listener after it's triggered once
+    document.removeEventListener("keypress", handleKeyPress);
+  }
+}
+
+// Add the event listener for keypress
+document.addEventListener("keypress", handleKeyPress);
+
+*/
+
+/* const event = new KeyboardEvent('keydown', {
+  key: 'Enter',
+  code: 'Enter',
+  which: 13,
+  keyCode: 13,
+});*/
+
+// dispatch the event on some DOM element
+// document.getElementById('angryboy').dispatchEvent(event);
+		var maker={
+			name: "maker",
+			shape: "circle",
+			color:"rgb(0,255,0)",
+			radius:1,
+			x:4,
+			density:2,
+			onImpact:function(entity,force){
+				if(entity.name()=="player"){
+				this.color("black");
+				collions.play();
+
+			}
+
+			}
+	};
+	
+		var ground={
+			name: "ground",
+			shape: "square",
+			type:"static",
+			color:"rgb(255,255,0)",
+			width:150,
+			height:.5,
+			y:12,
+			onImpact:function(entity,force){
+				if(entity.name()=="player"){
+				j+=1;
+				console.log(j);
+			}
+		}
+			
+	};
+
+		var block={
+			name:"block",
+			shape:"square",
+			color:"blue",
+			width:.5,
+			height:4,
+			onImpact:function(entity,force){
+				if(entity.name()=="maker"){
+				this.color("black");
+				collions.play();
+				gameover();
+			}
+		}
+		
+		};
+	
+		var upperpart={
+			name:"block",
+			shape:"square",
+			color:"yellow",
+			width:.5,
+			height:4,
+			onImpact:function(entity,force){
+				if(entity.name()=="player"){
+				this.color("black");
+				collions.play();
+     
+							}
+		}
+		};
+
+
+    world.createEntity(player,{
+			
+		});
+
+		world.createEntity(block,{
+			x:10
+		});
+		world.createEntity(ground,{
+			
+		});
+		world.createEntity(block,{
+			x:15
+		});
+		world.createEntity(block,{
+			x:25,
+		});
+		world.createEntity(block,{
+			x:30,
+		});
+		world.createEntity(block,{
+			x:40,
+		});
+		world.createEntity(block,{
+			x:45,
+		});
+		world.createEntity(upperpart,{
+			x:12.5,
+			y:1,
+			width:6,
+			height:.5
+		});
+		world.createEntity(upperpart,{
+			x:27.5,
+			y:1,
+			width:6,
+			height:.5
+		});
+		world.createEntity(upperpart,{
+			x:42.5,
+			y:1,
+			width:6,
+			height:.5
+		});
+		world.createEntity(maker,{
+			x:12.5,
+
+		});
+		world.createEntity(maker,{
+			x:27.5,
+
+		});
+		world.createEntity(maker,{
+			x:42.5,
+
+		});
+	</script>
+</body>
+</html>
+
