@@ -9,45 +9,49 @@
     	background-image: url('backimg.jpg');
     	width: 2000;
     	height: 2000;
+    	background-repeat: no-repeat;
     }
 
    </style>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body>
-	<p id="gameover" style="width:500;height:500;display:none;text-align:center;color:red;font-size:200px;">Game Over!!</p>
+	
+
+	<h style="text-align:center;color:blue;font-size:30px;">Angry Birds Game!!</h>
+	
+   
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+	<p id="score" style="width:100;height:100;text-align:center;color:red;font-size:100px;">Score's:-</p>
+	
 	<p id="screen"></p>
-	<audio id="myAudio">
-  <source src="angryi.mp3" type="audio/mp3">
-</audio>
-<audio id="playact">
-		<source src="angryij.mp3" type="audio/mp3">
-		</audio>
+ <p id="demo" style="width:50;height:50;text-align:center;color:red;font-size:100px;"></p>
+<canvas id="game" width=1500 height=1500>
+</canvas>	
 
-		<audio id="collides">
-			<source src="angryio.mp3" type="audio/mp3">
-		</audio>
-
-	<canvas id="game" width=2000 height=2000>
-	</canvas>
 	<script>
+		var i=0;
+		var Score=0;
+	  var x;
 		var canvasElem=document.getElementById("game");
 		var world=boxbox.createWorld(canvasElem);
-		var i=0;
-		var j=0;
+		
+			var audo1=new Audio("angryij.mp3");
+	var audo2=new Audio("angryio.mp3");
+		
+		var score=document.getElementById("score").value;
     var introplay=document.getElementById("myAudio");
     var playaction=document.getElementById("playact");
     var collions=document.getElementById("collides");
-		var a=document.getElementById("gameover");
-
+		
 		
 
-		introplay.play();
-
+  
 		var player={
 			name: "player",
 			shape: "circle",
 			radius:1,
-			image:"angry.png",
+			image:"angrybu.png",
 			imageStretchToFit:true,
 			x:4,
 		  
@@ -56,12 +60,15 @@
 			onKeyDown:function(e){
                     
 		        if(e.key == "Enter"){	
-		        	console.log(1);
                      if(i == 1){
                  	this.applyImpulse(150,60);
-                 	playaction.play();
+                 	        audo1.play();		
+                      
+   }
+                 	
          }
 				areal();
+				
 			}
 
 
@@ -69,21 +76,17 @@
 
            
 		}
-	}
+	
 		
-
+   
 	
 		function areal()
 		{
          i+=1;
          
      }
-   function gameover()
-   {
-	if(j>100){
-		a.style.display='block';
-	}
-   }
+
+ 
 
 		/*function handleKeyPress(event) {
   if (event.key === "Enter") {
@@ -119,13 +122,30 @@ document.addEventListener("keypress", handleKeyPress);
 			onImpact:function(entity,force){
 				if(entity.name()=="player"){
 				this.color("black");
-				collions.play();
+				audo2.play();
 
 			}
 
 			}
 	};
-	
+	var enemy={
+			name: "enemy",
+			shape: "circle",
+			radius:1,
+			image:"pigs.png",
+			imageStretchToFit:true,
+			x:4,
+		  
+      key:"Enter",
+			density:2,
+			
+			
+			}
+
+
+		
+
+        
 		var ground={
 			name: "ground",
 			shape: "square",
@@ -133,13 +153,7 @@ document.addEventListener("keypress", handleKeyPress);
 			color:"rgb(255,255,0)",
 			width:150,
 			height:.5,
-			y:12,
-			onImpact:function(entity,force){
-				if(entity.name()=="player"){
-				j+=1;
-				console.log(j);
-			}
-		}
+			y:12
 			
 	};
 
@@ -147,18 +161,31 @@ document.addEventListener("keypress", handleKeyPress);
 			name:"block",
 			shape:"square",
 			color:"blue",
-			width:.5,
+       width:.5,
+
 			height:4,
 			onImpact:function(entity,force){
-				if(entity.name()=="maker"){
-				this.color("black");
-				collions.play();
-				gameover();
+				if(entity.name()=="player" || entity.name()=="enemy"){
+				
+				this.color="black";
+         Score+=1;
+         artwork();
+       				
+
+
+       
+
 			}
+		
 		}
 		
 		};
 	
+
+	function artwork(){
+		
+  document.getElementById("demo").innerHTML=Score;
+	}
 		var upperpart={
 			name:"block",
 			shape:"square",
@@ -168,7 +195,7 @@ document.addEventListener("keypress", handleKeyPress);
 			onImpact:function(entity,force){
 				if(entity.name()=="player"){
 				this.color("black");
-				collions.play();
+				
      
 							}
 		}
@@ -182,6 +209,18 @@ document.addEventListener("keypress", handleKeyPress);
 		world.createEntity(block,{
 			x:10
 		});
+		world.createEntity(enemy,{
+			x:42.5,
+			y:12
+		})
+		world.createEntity(enemy,{
+			x:27.5,
+			y:12
+		})
+		world.createEntity(enemy,{
+			x:12.5,
+			y:12
+		})
 		world.createEntity(ground,{
 			
 		});
@@ -218,18 +257,10 @@ document.addEventListener("keypress", handleKeyPress);
 			width:6,
 			height:.5
 		});
-		world.createEntity(maker,{
-			x:12.5,
+		
+		
 
-		});
-		world.createEntity(maker,{
-			x:27.5,
 
-		});
-		world.createEntity(maker,{
-			x:42.5,
-
-		});
 	</script>
 </body>
 </html>
