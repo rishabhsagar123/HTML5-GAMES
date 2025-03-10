@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pac-Man Game</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            background-color: black;
+            display: block;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Pac-Man Game</h1>
+    <p>Use arrow keys to move Pac-Man.</p>
+    <p>Score: <span id="score">0</span>| High Score: <span id="highScore">0</span>| Previous Score: <span id="previousScore">0</span>| Time Spent: <span id="timeSpent">0</span>| Best Time: <span id="bestTime">0</span>| Survival Time: <span id="survivalTime">0</span>| Time Left: <span id="timeLeft">60</span>s</p></p>
+    <canvas id="gameCanvas" width="600" height="600"></canvas>
+
+    <script>
+        var turnAud=new Audio("C:\\Users\\user\\Downloads\\turn.mp3");
+        var coinAud=new Audio("C:\\Users\\user\\Downloads\\coin.wav");
+        var gameoverAud=new Audio("C:\\Users\\user\\Downloads\\gameover.mp3");
+        // Get canvas and context
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        // Game variables
+        let tileSize = 25;
+        let rows = canvas.height / tileSize;
+        let cols = canvas.width / tileSize;
+        let score = 0;
+        let highScore = localStorage.getItem("highScore") || 0;
+        document.getElementById("highScore").innerText = highScore;
+        let previousScore = localStorage.getItem("previousScore") || 0;
+        document.getElementById("previousScore").innerText = previousScore;
+        let startTime = Date.now(); // Store the start time of the game
+        let elapsedTime = 0; // Time spent in the current game
+        let bestTime = localStorage.getItem("bestTime") || 0; // Retrieve best time from localStorage
+        let survivalTime = localStorage.getItem("survivalTime") || 0; // Retrieve best time from localStorage
+        let gameTime = 60; // Set total game time in seconds (1 minute)
+        let countdownTimer= gameTime; // Start with full time
+        let timerInterval;
+
+        
+
+        // Pac-Man object
+        let pacman = {
+            x: tileSize * 2,
+            y: tileSize * 2,
+            dx: tileSize,
+            dy: 0,
+            angle: 0, // Direction angle
+        };
+
+        // Enemy object
+        let enemy = {
+            x: tileSize * 10,
+            y: tileSize * 10,
+            dx: tileSize,
+            dy: 0,
+            angle:0,
+        };
+
+        var enemy1={
+            x:tileSize * 12,
+            y:tileSize * 12,
+            dx:tileSize,
+            dy:0,
+            angle:0,
+        }
+
+        var enemy2={
+            x:tileSize * 14,
+            y:tileSize * 14,
+            dx:tileSize,
+            dy:0,
+            angle:0,
+        }
+        var enemy3={
+            x:tileSize * 16,
+            y:tileSize * 16,
+            dx:tileSize,
+            dy:0,
+            angle:0,
+        }
+        // Obstacles (walls)
+        let obstacles = [
+            { x: tileSize * 5, y: tileSize * 5 },
+            { x: tileSize * 6, y: tileSize * 5 },
+            { x: tileSize * 7, y: tileSize * 5 },
+            { x: tileSize * 8, y: tileSize * 5 },
+            { x: tileSize * 9, y: tileSize * 5 },
+            { x: tileSize * 10, y: tileSize * 5 },
+            { x: tileSize * 5, y: tileSize * 6 },
+            { x: tileSize * 5, y: tileSize * 7 },
+            { x: tileSize * 10, y: tileSize * 5 },
+            { x: tileSize * 10, y: tileSize * 6 },
+            { x: tileSize * 10, y: tileSize * 7 },
+            { x: tileSize * 12, y: tileSize * 15 },
+            { x: tileSize * 13, y: tileSize * 15 },
+            { x: tileSize * 14, y: tileSize * 15 },
+            { x: tileSize * 15, y: tileSize * 15 },
+            { x: tileSize * 16, y: tileSize * 15 },
+            { x: tileSize * 17, y: tileSize * 15 },
+            { x: tileSize * 12, y: tileSize * 15 },
+            { x: tileSize * 12, y: tileSize * 16 },
+            { x: tileSize * 12, y: tileSize * 17 },
+            { x: tileSize * 12, y: tileSize * 18 },
+            { x: tileSize * 17, y: tileSize * 15 },
+            { x: tileSize * 17, y: tileSize * 16 },
+            { x: tileSize * 17, y: tileSize * 17 },
+            { x: tileSize * 17, y: tileSize * 18 }
+        
+
+        
+
+        
+
+        
+ 
+
+            
+        ];
+
+       
+
+        // Generate pellets
+        let pellets = [];
+        for (let i = 0; i < 50; i++) {
+            let pelletX, pelletY;
+    
+    do {
+        pelletX = Math.floor(Math.random() * cols) * tileSize;
+        pelletY = Math.floor(Math.random() * rows) * tileSize;
+    } while (isInsideObstacle(pelletX, pelletY)); // Keep generating until a valid spot is found
+
+    pellets.push({ x: pelletX, y: pelletY });
+}
+    // for time spent and update time in every 1sec      
+    function updateTimeDisplay() {
+    elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+    document.getElementById("timeSpent").innerText = elapsedTime;
+    document.getElementById("bestTime").innerText = bestTime;
+    document.getElementById("survivalTime").innerText = survivalTime;
+}
+setInterval(updateTimeDisplay, 1000);
+
+
+// using countdown timer
+function startTimer() {
+    timerInterval = setInterval(() => {
+        countdownTimer--; // Decrease time by 1 second
+
+        if (countdownTimer <= 0) {
+            clearInterval(timerInterval); // Stop the timer
+            alert("TimesUP!!")
+            location.reload(); // Call game over function
+        }
+    }, 1000); // Runs every 1 second
+}
+
+window.onload = function () {
+    startTimer(); // Start the countdown when the game loads
+};
+
+function updateTimeDisplayer() {
+    document.getElementById("timeLeft").innerText = countdownTimer;
+}
+
+
+// Update time every second
+setInterval(updateTimeDisplayer, 1000);
+  
+  // it helps to not go pallete inside the obstacle
+    function isInsideObstacle(x, y) {
+    return obstacles.some(obstacle => obstacle.x === x && obstacle.y === y);
+}
+  
+        // Draw Pac-Man
+        function drawPacman() {
+            ctx.beginPath();
+            ctx.fillStyle = "yellow";
+            ctx.arc(pacman.x + tileSize / 2, pacman.y + tileSize / 2, tileSize / 2, pacman.angle + 0.2, pacman.angle + Math.PI * 2 - 0.2);
+            ctx.lineTo(pacman.x + tileSize / 2, pacman.y + tileSize / 2);
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        // Draw enemy
+        function drawEnemy() {
+            ctx.beginPath();
+            ctx.fillStyle = "red";
+            ctx.arc(enemy.x + tileSize / 2, enemy.y + tileSize / 2, tileSize / 2 ,0, enemy.angle + Math.PI * 2);
+            ctx.lineTo(enemy.x + tileSize / 2, enemy.y + tileSize / 2);
+            ctx.fill();
+            ctx.closePath();
+        }
+        function drawEnemy1() {
+            ctx.beginPath();
+            ctx.fillStyle = "green";
+            ctx.arc(enemy1.x + tileSize / 2, enemy1.y + tileSize / 2, tileSize / 2 ,0, enemy1.angle + Math.PI * 2);
+            ctx.lineTo(enemy1.x + tileSize / 2, enemy1.y + tileSize / 2);
+            ctx.fill();
+            ctx.closePath();
+        }
+
+    function drawEnemy2() {
+            ctx.beginPath();
+            ctx.fillStyle = "blue";
+            ctx.arc(enemy2.x + tileSize / 2, enemy2.y + tileSize / 2, tileSize / 2 ,0, enemy2.angle + Math.PI * 2);
+            ctx.lineTo(enemy2.x + tileSize / 2, enemy2.y + tileSize / 2);
+            ctx.fill();
+            ctx.closePath();
+        }
+        function drawEnemy3() {
+            ctx.beginPath();
+            ctx.fillStyle = "yellow";
+            ctx.arc(enemy3.x + tileSize / 2, enemy3.y + tileSize / 2, tileSize / 2 ,0, enemy3.angle + Math.PI * 2);
+            ctx.lineTo(enemy3.x + tileSize / 2, enemy3.y + tileSize / 2);
+            ctx.fill();
+            ctx.closePath();
+        }
+        // Draw obstacles
+        function drawObstacles() {
+            ctx.fillStyle = "white";
+            obstacles.forEach(obstacle => {
+                ctx.fillRect(obstacle.x, obstacle.y, tileSize, tileSize);
+            });
+        }
+
+        
+
+        // Draw pellets
+        function drawPellets() {
+            ctx.fillStyle = "orange";
+            pellets.forEach(pellet => {
+                ctx.beginPath();
+                ctx.arc(pellet.x + tileSize / 2, pellet.y + tileSize / 2, tileSize / 5, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.closePath();
+            });
+        }
+
+        // Move Pac-Man
+        function movePacman() {
+            let nextX = pacman.x + pacman.dx;
+            let nextY = pacman.y + pacman.dy;
+
+            // Check wall collision
+            let hitWall = obstacles.some(obstacle => obstacle.x === nextX && obstacle.y === nextY);
+            if (!hitWall && nextX >= 0 && nextX < canvas.width && nextY >= 0 && nextY < canvas.height) {
+                pacman.x = nextX;
+                pacman.y = nextY;
+            }
+
+            // Eat pellets
+            for (let i = 0; i < pellets.length; i++) {
+                if (pellets[i].x === pacman.x && pellets[i].y === pacman.y) {
+                    pellets.splice(i, 1);
+                    score += 10;
+                    coinAud.play();
+                    document.getElementById("score").innerText = score;
+                    if(score==500){
+                        alert("You win the game");
+                        elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+ 
+                     // Store the best time if the current time is lower
+                   if (bestTime === 0) {
+                        localStorage.setItem("bestTime", elapsedTime);
+                      }else if(elapsedTime < bestTime) {
+                        localStorage.setItem("bestTime", elapsedTime);
+                      }
+                      //cheking the high score
+                      if (score > highScore) {
+                    localStorage.setItem("highScore", score);
+                    localStorage.setItem("previousScore", score);
+                }else{
+
+                localStorage.setItem("previousScore", score);
+            }
+
+                      //survival time 
+
+                      localStorage.setItem("survivalTime", elapsedTime);
+
+                        location.reload(); 
+                    }  
+
+                    break;         
+            }
+             
+             
+
+                   
+                }
+            
+            
+
+            // Check enemy collision
+            if (pacman.x=== enemy.x+pacman.dx && pacman.y=== enemy.y+pacman.dy || pacman.x===enemy1.x+pacman.dx && pacman.y===enemy1.y+pacman.dy || pacman.x===enemy2.x+pacman.dx && pacman.y===enemy2.y+pacman.dy || pacman.x===enemy3.x+pacman.dx && pacman.y===enemy3.y+pacman.dy) {
+                gameoverAud.play();
+                elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+ 
+               
+               
+                  // survival time should be greater 
+                  if (survivalTime < elapsedTime) {
+                   localStorage.setItem("survivalTime", elapsedTime);
+                  }else if(survivalTime == 0){
+                    localStorage.setItem("survivalTime", elapsedTime);
+                  }
+
+                if (score > highScore) {
+                    localStorage.setItem("highScore", score);
+                }else{
+
+                localStorage.setItem("previousScore", score);
+            }
+        setTimeout(() => {
+        location.reload();
+    }, 1000); 
+            }
+        }
+
+        // Move enemy randomly
+        function moveEnemy() {
+            let directions = [
+                { dx: tileSize, dy: 0 },
+                { dx: -tileSize, dy: 0 },
+                { dx: 0, dy: tileSize },
+                { dx: 0, dy: -tileSize }
+            ];
+            let randomDir = directions[Math.floor(Math.random() * directions.length)];
+            let randomDir2 = directions[Math.floor(Math.random() * directions.length)];
+            let randomDir3 = directions[Math.floor(Math.random() * directions.length)];
+            let randomDir4 = directions[Math.floor(Math.random() * directions.length)];
+            let nextX = enemy.x + randomDir.dx;
+            let nextY = enemy.y + randomDir.dy;
+            let nextKX= enemy1.x + randomDir2.dx;
+            let nextKY= enemy1.y + randomDir2.dy;
+            let nextKX2=enemy2.x + randomDir3.dx;
+            let nextKY2=enemy2.y + randomDir3.dy;
+            let nextKX3=enemy3.x + randomDir4.dx;
+            let nextKY3=enemy3.y + randomDir4.dy;
+
+
+            // Check wall collision of enemy
+            let hitWall = obstacles.some(obstacle => obstacle.x === nextX && obstacle.y === nextY || obstacle.x === nextKX && obstacle.y === nextKY|| obstacle.x === nextKX2 && obstacle.y === nextKY2 || obstacle.x === nextKX3 && obstacle.y === nextKY3);
+
+            if (!hitWall && nextX >= 0 && nextX < canvas.width && nextY >= 0 && nextY < canvas.height && !hitWall && nextKX >= 0 && nextKX < canvas.width && nextKY >= 0 && nextKY < canvas.height && !hitWall && nextKX2 >= 0 && nextKX2 < canvas.width && nextKY2 >= 0 && nextKY2 < canvas.height && !hitWall && nextKX3 >= 0 && nextKX3 < canvas.width && nextKY3 >= 0 && nextKY3 < canvas.height  ) {
+                enemy.x = nextX;
+                enemy.y = nextY;
+                enemy1.x = nextKX;
+                enemy1.y = nextKY;
+                enemy2.x = nextKX2;
+                enemy2.y = nextKY2;
+                enemy3.x = nextKX3;
+                enemy3.y = nextKY3;
+             }
+        }
+
+        // Update game
+        function update() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawObstacles();
+            drawPellets();
+            movePacman();
+            moveEnemy();
+            drawPacman();
+            drawEnemy();
+            drawEnemy1();
+            drawEnemy2();
+            drawEnemy3();
+        }
+
+        // Handle key press for movement
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "ArrowUp") {
+                pacman.dx = 0;
+                pacman.dy = -tileSize;
+                pacman.angle = -Math.PI / 2;
+                turnAud.play();
+            } else if (event.key === "ArrowDown") {
+                pacman.dx = 0;
+                pacman.dy = tileSize;
+                pacman.angle = Math.PI / 2;
+                turnAud.play();
+            } else if (event.key === "ArrowLeft") {
+                pacman.dx = -tileSize;
+                pacman.dy = 0;
+                pacman.angle = Math.PI;
+                turnAud.play();
+            } else if (event.key === "ArrowRight") {
+                pacman.dx = tileSize;
+                pacman.dy = 0;
+                pacman.angle = 0;
+                turnAud.play();
+            }
+        });
+
+        // Game loop
+        setInterval(update, 200);
+        
+    </script>
+</body>
+</html>
