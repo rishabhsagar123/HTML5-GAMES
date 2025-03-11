@@ -46,6 +46,7 @@
         let gameTime = 60; // Set total game time in seconds (1 minute)
         let countdownTimer= gameTime; // Start with full time
         let timerInterval;
+        let colors = ["black","black","black","red", "green", "blue", "yellow", "purple","black","black","black", "orange", "violet","black","black","black","green", "grey","black","black","black","black","black"];
 
         
 
@@ -91,18 +92,18 @@
         }
         // Obstacles (walls)
         let obstacles = [
-            { x: tileSize * 5, y: tileSize * 5 },
-            { x: tileSize * 6, y: tileSize * 5 },
-            { x: tileSize * 7, y: tileSize * 5 },
-            { x: tileSize * 8, y: tileSize * 5 },
-            { x: tileSize * 9, y: tileSize * 5 },
-            { x: tileSize * 10, y: tileSize * 5 },
-            { x: tileSize * 5, y: tileSize * 6 },
-            { x: tileSize * 5, y: tileSize * 7 },
-            { x: tileSize * 10, y: tileSize * 5 },
-            { x: tileSize * 10, y: tileSize * 6 },
-            { x: tileSize * 10, y: tileSize * 7 },
-            { x: tileSize * 12, y: tileSize * 15 },
+            { x: tileSize * 5, y: tileSize * 5},
+            { x: tileSize * 6, y: tileSize * 5},
+            { x: tileSize * 7, y: tileSize * 5},
+            { x: tileSize * 8, y: tileSize * 5},
+            { x: tileSize * 9, y: tileSize * 5},
+            { x: tileSize * 10, y: tileSize * 5},
+            { x: tileSize * 5, y: tileSize * 6},
+            { x: tileSize * 5, y: tileSize * 7},
+            { x: tileSize * 10, y: tileSize * 5},
+            { x: tileSize * 10, y: tileSize * 6},
+            { x: tileSize * 10, y: tileSize * 7},
+            { x: tileSize * 12, y: tileSize * 15},
             { x: tileSize * 13, y: tileSize * 15 },
             { x: tileSize * 14, y: tileSize * 15 },
             { x: tileSize * 15, y: tileSize * 15 },
@@ -115,7 +116,25 @@
             { x: tileSize * 17, y: tileSize * 15 },
             { x: tileSize * 17, y: tileSize * 16 },
             { x: tileSize * 17, y: tileSize * 17 },
-            { x: tileSize * 17, y: tileSize * 18 }
+            { x: tileSize * 17, y: tileSize * 18 },
+
+
+            { x: tileSize * 10, y: tileSize * 8 },
+    { x: tileSize * 10, y: tileSize * 9 },
+    { x: tileSize * 10, y: tileSize * 10 },
+
+    // Box-shaped obstacle
+    { x: tileSize * 12, y: tileSize * 4 },
+    { x: tileSize * 13, y: tileSize * 4 },
+    { x: tileSize * 12, y: tileSize * 5 },
+    { x: tileSize * 13, y: tileSize * 5 },
+
+    //making surface obstacle
+
+     { x: tileSize * 10, y: tileSize * 10 },
+      { x: tileSize *11, y: tileSize * 10 },
+       { x: tileSize * 12, y: tileSize * 10 }
+
         
 
         
@@ -128,11 +147,17 @@
             
         ];
 
-       
+for (let i = 0; i < 10; i++) {
+    obstacles.push({
+        x: Math.floor(Math.random() * 20) * tileSize,
+        y: Math.floor(Math.random() * 20) * tileSize,
+        color: colors[Math.floor(Math.random() * colors.length)] // Pick a random color
+    });
+}
 
         // Generate pellets
         let pellets = [];
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < 70; i++) {
             let pelletX, pelletY;
     
     do {
@@ -228,7 +253,7 @@ setInterval(updateTimeDisplayer, 1000);
         }
         // Draw obstacles
         function drawObstacles() {
-            ctx.fillStyle = "white";
+            ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
             obstacles.forEach(obstacle => {
                 ctx.fillRect(obstacle.x, obstacle.y, tileSize, tileSize);
             });
@@ -266,7 +291,7 @@ setInterval(updateTimeDisplayer, 1000);
                     score += 10;
                     coinAud.play();
                     document.getElementById("score").innerText = score;
-                    if(score==500){
+                    if(score==700){
                         alert("You win the game");
                         elapsedTime = Math.floor((Date.now() - startTime) / 1000);
  
@@ -406,6 +431,7 @@ setInterval(updateTimeDisplayer, 1000);
 
         // Game loop
         setInterval(update, 200);
+        
         
     </script>
 </body>
